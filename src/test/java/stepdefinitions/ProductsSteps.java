@@ -1,6 +1,5 @@
 package stepdefinitions;
 
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -17,13 +16,11 @@ import javax.inject.Inject;
 import static utils.TestSetUp.picoContainer;
 
 public class ProductsSteps {
-    private final TestContext testContext;
     private static final String BASE_URI = "https://fakestoreapi.com";
     //staticebi unda shevcvalo
     public static Response response;
     public static JSONObject requestParams;
-    public  String s;
-
+    private final TestContext testContext;
     public ResponseBody responseBody;
     private int responseCode;
 
@@ -58,7 +55,7 @@ public class ProductsSteps {
         //json representation from the body
         JsonPath jsonPath = response.jsonPath();
 
-         String productRate = jsonPath.getJsonObject("rating[0].rate").toString();
+        String productRate = jsonPath.getJsonObject("rating[0].rate").toString();
 
         Assert.assertEquals(productRate, rate);
     }
@@ -94,33 +91,60 @@ public class ProductsSteps {
         System.out.println(body.asString());
     }
 
+    @Then("I receive the response body after post with id as {string}")
+    public void iReceiveTheResponseBodyAfterPostWithIdAs(String id) {
+        JsonPath jsonPath = response.jsonPath();
+        testContext.setID(jsonPath.getJsonObject("id").toString());
+        Assert.assertEquals(testContext.getID(), id);
+        testContext.clearID();
+    }
+
     @Then("I receive the response body with id as {string}")
     public void iReceiveTheResponseBodyWithIdAs(String id) {
         System.out.println(testContext.getID());
         Assert.assertEquals(testContext.getID(), id, "Returned id is not correct");
+        testContext.clearID();
     }
 
     @Given("I hit the URL of the put products api endpoint")
     public void iHitTheURLOfThePutProductsApiEndpoint() {
         RestAssured.baseURI = "https://fakestoreapi.com";
-          requestParams = new JSONObject();
+        requestParams = new JSONObject();
     }
 
-    @When("I pass the URL of products in the request with {string}")
-    public void iPassTheURLOfProductsInTheRequestWith(String productNum) {
+    @When("I pass the URL of update products in the request with {string}")
+    public void iPassTheURLOfUpdateProductsInTheRequestWith(String productNum) {
         requestParams.put("title", "test product");
         requestParams.put("price", "34.6");
         requestParams.put("description", "lorem ipsum");
         requestParams.put("image", "https://i.pravatar.cc");
         requestParams.put("category", "clothes");
 
-        Response response =  RestAssured.given()
+        Response response = RestAssured.given()
                 .header("Content-Type", "application/json")
                 .body(requestParams.toJSONString())
-                .put("/products/"+productNum);
+                .put("/products/" + productNum);
 
         JsonPath jsnpath = response.jsonPath();
         String productID = jsnpath.getJsonObject("id").toString();
+        System.out.println(testContext.getID());
         testContext.setID(productID);
+        System.out.println(testContext.getID());
+    }
+
+    @Given("I hit the URL of the delete products api endpoint")
+    public void iHitTheURLOfTheDeleteProductsApiEndpoint() {
+        RestAssured.baseURI = BASE_URI;
+    }
+
+
+    @When("I pass the URL of delete products in the request with {string}")
+    public void iPassTheURLOfDeleteProductsInTheRequestWith(String productNum) {
+        response = RestAssured.given()
+                .header("Content-Type", "application/json")
+                .delete("/products/" + productNum);
+
+        JsonPath jsonPath = response.jsonPath();
+        testContext.setID(jsonPath.getJsonObject("id").toString());
     }
 }

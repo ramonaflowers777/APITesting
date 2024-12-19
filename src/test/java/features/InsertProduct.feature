@@ -5,8 +5,8 @@ Feature: Insert product using POST API
     When I pass the URL of products in the request
     And I pass the request body of product title "<productTitle>"
     Then I receive the response code as 200
-    And I receive the response body with id as "<id>"
+    And I receive the response body after post with id as "<id>"
 
     Examples:
-      | productTitle |id|
-      | Shoes        |21|
+      | productTitle | id |
+      | Shoes        | 21 |
