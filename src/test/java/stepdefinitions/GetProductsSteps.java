@@ -13,9 +13,9 @@ import org.testng.Assert;
 
 public class GetProductsSteps {
     public static Response response;
-    private  int responseCode;
-    public ResponseBody responseBody;
     public static JSONObject requestParams;
+    public ResponseBody responseBody;
+    private int responseCode;
 
     @Given("I hit the URL of the get products api endpoint")
     public void i_hit_the_url_of_the_get_products_api_endpoint() {
@@ -25,7 +25,7 @@ public class GetProductsSteps {
     @When("I pass the URL of products in the request")
     public void i_pass_the_URL_of_products_in_the_request() {
         response = RestAssured.given().
-                header("Content-Type","application/json").
+                header("Content-Type", "application/json").
                 get("/products");
         Assert.assertNotNull(response, "Response is null - request may have failed.");
     }
@@ -48,27 +48,25 @@ public class GetProductsSteps {
 
         String s = jsonPath.getJsonObject("rating[0].rate").toString();
 
-        Assert.assertEquals(s,rate);
+        Assert.assertEquals(s, rate);
     }
 
     @Given("I hit the URL of the post products api endpoint")
     public void iHitTheURLOfThePostProductsApiEndpoint() {
         RestAssured.baseURI = "https://fakestoreapi.com";
-
-        requestParams = new JSONObject();
-        requestParams.put("title","shoes");
-        requestParams.put("price","34.6");
-        requestParams.put("description","lorem ipsum");
-        requestParams.put("image","https://i.pravatar.cc");
-        requestParams.put("category","clothes");
     }
 
     @And("I pass the request body of product title {string}")
     public void iPassTheRequestBodyOfProductTitle(String productTitle) {
-        requestParams.put("title",productTitle);
+        requestParams = new JSONObject();
+        requestParams.put("title", productTitle);
+        requestParams.put("price", "34.6");
+        requestParams.put("description", "lorem ipsum");
+        requestParams.put("image", "https://i.pravatar.cc");
+        requestParams.put("category", "clothes");
 
         Response response = RestAssured.given()
-                .header("Content-Type","application/json").
+                .header("Content-Type", "application/json").
                 body(requestParams.toString())
                 .post("/products");
 

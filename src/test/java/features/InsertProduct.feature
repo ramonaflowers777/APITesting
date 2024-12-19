@@ -7,5 +7,5 @@ Feature: Insert product using POST API
     Then I receive the response code as 200
 
     Examples:
-    | productTitle |
-    | Shoes         |
+      | productTitle |
+      | Shoes        |

@@ -1,13 +1,5 @@
 package hooks;
 
-import aquality.selenium.browser.AqualityServices;
-import aquality.selenium.browser.Browser;
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
-import utils.SettingsTestData;
-
-import static io.qameta.allure.Allure.step;
-
 public class Hooks {
 //    private Browser browser = AqualityServices.getBrowser();
 //
