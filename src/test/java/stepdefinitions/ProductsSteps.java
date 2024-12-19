@@ -30,12 +30,12 @@ public class ProductsSteps {
     }
 
     @Given("I hit the URL of the get products api endpoint")
-    public void i_hit_the_url_of_the_get_products_api_endpoint() {
+    public void hittingGetApiEndpoint() {
         RestAssured.baseURI = BASE_URI;
     }
 
     @When("I pass the URL of products in the request")
-    public void i_pass_the_URL_of_products_in_the_request() {
+    public void passingURLofProducts() {
         response = RestAssured.given().
                 header("Content-Type", "application/json").
                 get("/products");
@@ -43,13 +43,13 @@ public class ProductsSteps {
     }
 
     @Then("I receive the response code as {int}")
-    public void i_receive_the_response_code_as(int statusCode) {
+    public void iReceoveResponseWithStatusCode(int statusCode) {
         responseCode = response.getStatusCode();
         Assert.assertEquals(responseCode, statusCode, "Status code was incorrect");
     }
 
     @Then("I verify that the rate of the first product is {string}")
-    public void i_verify_that_the_rate_of_the_product_is(String rate) {
+    public void iVerifyProductRate(String rate) {
         responseBody = response.getBody();
 
         //json representation from the body
@@ -61,7 +61,7 @@ public class ProductsSteps {
     }
 
     @Given("I hit the URL of the post products api endpoint")
-    public void iHitTheURLOfThePostProductsApiEndpoint() {
+    public void hittingURlOfPostApiEndpoint() {
         RestAssured.baseURI = BASE_URI;
     }
 
@@ -92,7 +92,7 @@ public class ProductsSteps {
     }
 
     @Then("I receive the response body after post with id as {string}")
-    public void iReceiveTheResponseBodyAfterPostWithIdAs(String id) {
+    public void iReceiveTheResponseBodyAfterPostWithId(String id) {
         JsonPath jsonPath = response.jsonPath();
         testContext.setID(jsonPath.getJsonObject("id").toString());
         Assert.assertEquals(testContext.getID(), id);
@@ -100,20 +100,20 @@ public class ProductsSteps {
     }
 
     @Then("I receive the response body with id as {string}")
-    public void iReceiveTheResponseBodyWithIdAs(String id) {
+    public void iReceiveTheResponseBodyWithId(String id) {
         System.out.println(testContext.getID());
         Assert.assertEquals(testContext.getID(), id, "Returned id is not correct");
         testContext.clearID();
     }
 
     @Given("I hit the URL of the put products api endpoint")
-    public void iHitTheURLOfThePutProductsApiEndpoint() {
+    public void hittingPutApiEndpoint() {
         RestAssured.baseURI = "https://fakestoreapi.com";
         requestParams = new JSONObject();
     }
 
     @When("I pass the URL of update products in the request with {string}")
-    public void iPassTheURLOfUpdateProductsInTheRequestWith(String productNum) {
+    public void passingUpdateRequest(String productNum) {
         requestParams.put("title", "test product");
         requestParams.put("price", "34.6");
         requestParams.put("description", "lorem ipsum");
@@ -133,13 +133,13 @@ public class ProductsSteps {
     }
 
     @Given("I hit the URL of the delete products api endpoint")
-    public void iHitTheURLOfTheDeleteProductsApiEndpoint() {
+    public void hittingURlofDeleteApiEndpoint() {
         RestAssured.baseURI = BASE_URI;
     }
 
 
     @When("I pass the URL of delete products in the request with {string}")
-    public void iPassTheURLOfDeleteProductsInTheRequestWith(String productNum) {
+    public void passingDeleteProductsRequest(String productNum) {
         response = RestAssured.given()
                 .header("Content-Type", "application/json")
                 .delete("/products/" + productNum);
